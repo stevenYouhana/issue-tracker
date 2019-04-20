@@ -5,6 +5,7 @@ module.exports = function (app) {
   var MongoClient = require('mongodb');
   var ObjectId = require('mongodb').ObjectID;
   var Check = require('../controllers/check');
+  var Update = require('../controllers/update'); 
   Object.size = function(obj) {
     var len = 0, key;
     for (key in obj) {
@@ -14,31 +15,6 @@ module.exports = function (app) {
   }
   var check = new Check();
   const CONNECTION_STRING = process.env.DB;
-  function promise(project, req, res) {
-    return new Promise(function(resolve, reject) {
-      MongoClient.connect(CONNECTION_STRING, function(err, db) {
-        try {
-        db.collection(project).findOne(
-          {_id: ObjectId(req.body._id)}, function(err, issue) {
-            if (err) {
-              console.error('err finding' +err);
-              // res.send('issue id not found');
-            }
-            if (issue) {
-              resolve(issue);
-              console.log("PROMISE ISTABLISHED")
-            }
-            else {
-              reject(new Error("promise(data)>>no data"));
-            }
-        });
-        } catch (e) {
-          console.log('async function promise(project, req, res) {::INVALID ID');
-          res.send('ID provided is invalid');
-        }
-      });
-    });
-  }
   
   app.route('/api/issues/:project')
     .get(function (req, res){
@@ -55,7 +31,7 @@ module.exports = function (app) {
       })
     })
     .post(function (req, res) {
-      var project = req.params.project;
+      var project = req.params.project; 
       MongoClient.connect(CONNECTION_STRING, function(err, db) {
         if (err) console.error(err)
         var issue = {
@@ -88,78 +64,76 @@ module.exports = function (app) {
       });
     })
     .put(function (req, res) {
-      check.requiredFields(res,
-                       {faultMessage: 'no updated field sent', task: 'update'},
-                       req.body.issue_title,
-                       req.body.issue_text,
-                       req.body.created_by,
-                       req.body.status_text,
-                       req.body.open
-                      );
-    console.log("PASSED CHECK");
-          var updateIssue = function(issue, original) {
-          function checkStatus(option, orig) {
-            if (option === undefined) return orig;
-            else if (option.toString().toLowerCase() === 'open')
-              return true;
-            else return false;
-          if (Object.size(req.body) <= 3) { console.log("if (Object.size(req.body) <= 3)", req.body)
-              issue.open = false;
-              issue.status_text = 'Closed';
-            } else { console.log("ELSE")
-              issue = { 
-                issue_title: req.body.issue_title ? req.body.issue_title : original.issue_title,
-                issue_text: req.body.issue_text ? req.body.issue_text : original.issue_text,
-                created_by: req.body.created_by ? req.body.created_by : original.created_by,
-                assigned_to: req.body.assigned_to ? req.body.assigned_to : original.assigned_to,
-                status_text: sortStatis(req.body.status_text, original),
-                open: checkStatus(req.body.status_text, original.open),
-                updated_on: new Date(Date.now()),
-                created_on: original.created_on
-              };
-              if (!issue.open) issue.status_text = 'Closed';
-            }
-          return issue;
-        }
-      }
-      if (Check.somethingMissing) return;
-    console.log("POST if (Check.somethingMissing) return;")
-      var sortStatis = function(text, original) {
-        if (!req.body.open) 
-          return req.body.status_text ? req.body.status_text : original.status_text;
-        else {
-          return req.body.status_text.toLowerCase() == 'closed'  ? 'Closed' : 'Open';
-        }
-      }
-
-
+    console.log(req.body)
       var project = req.params.project;
-
-      promise(project, req, res)
-        .then(function(fulfilled) {
-        console.log(".then(function(fulfilled) {")
-        var issue = JSON.parse(JSON.stringify(fulfilled));
-        delete issue._id;
-        console.log(updateIssue(issue, fulfilled));
-        MongoClient.connect(CONNECTION_STRING, function(err, db) {
-        db.collection(project)
-          .findOneAndUpdate(
-          {_id: ObjectId(req.body._id)}, updateIssue(issue, fulfilled), {new: true},
-          function(err, data) {
-            if (err) {
-              console.error('update error: '+err);
-              res.send('could not update '+req.body._id);
-            }
-            // res.send('succesfully updated');
-            db.close();
-            res.json(updateIssue(issue, fulfilled));
-          })
+      function sortStatus(status_text) {
+        if (status_text === undefined) return undefined;
+        switch (status_text.toLowerCase()) {
+          case 'open': return true;
+          case 'closed': return false;
+          default: return undefined;
+        }
+      }
+      
+      try {
+        var issue = {
+          issue_title: req.body.issue_title,
+          issue_text: req.body.issue_text,
+          created_by: req.body.created_by,
+          assigned_to: req.body.assigned_to,
+          status_text: req.body.status_text,
+          open: sortStatus(req.body.status_text),
+          updated_on: new Date(Date.now()),
+          created_on: new Date(Date.now())
+        }
+        check.requiredFields(res, 
+                       {faultMessage: 'no updated field sent', task: 'update'},
+                       issue.issue_title,
+                       issue.issue_text,
+                       issue.created_by
+                      );
+        var update = new Update(req.body, project);
+        update.findIssue(update.getProject, update.getBody)
+        .then((originalIssue) => {
+          MongoClient.connect(CONNECTION_STRING, function(err, db) {
+        try {
+          if (req.body.hasOwnProperty('type')) {
+              if (err) {
+                console.error(err)
+              }
+              db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)}, 
+                                  {$set: {open: false, status_text: 'Closed'}}, 
+                                  {new: true}, function(err, data) {
+                if (err) console.error("function(err, issue) {"+err);
+                else console.info("update successful CLOSED ISSUE");
+              });
+          }
+          else {
+            db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)}, 
+                                  {$set: update.getUpdatedIssue(issue, originalIssue)}, 
+                                  {new: true}, function(err, data) {
+                if (err) console.error("function(err, issue) {"+err);
+                if (data) {
+                   console.info("update successful FULL UPDATE");
+                   // res.json(data);
+                }
+              });
+          }
+        }
+        finally {
+          db.close();  
+        }
+    });
         })
-        }).catch(function(error) {
-          console.error("promise err: "+error)
-          // res.send('no updated field sent');
+        .catch((e) => {
+          console.error(e);
+          return;
         });
-    })
+      } 
+      catch(e) {console.error(e) }
+     if (Check.somethingMissing) return;
+      
+  })
     .delete(function (req, res){
       var project = req.params.project;
       MongoClient.connect(CONNECTION_STRING, function(err, db) {

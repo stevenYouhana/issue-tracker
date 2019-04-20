@@ -14,7 +14,7 @@ suite('Functional Tests', function() {
       
       test('Every field filled in', function(done) {
        chai.request(server)
-        .post('/api/issues/test')
+        .post('/api/issues/testapi')
         .send({
           issue_title: 'Title',
           issue_text: 'text',
@@ -68,6 +68,7 @@ suite('Functional Tests', function() {
           status_text: 'In QA'
       })
       .end(function(err, res) {
+          if (err) console.error(err);
           assert.equal(res.status, 200);
           assert.equal(res.text, 'Missing required fields');
           done();
@@ -78,30 +79,29 @@ suite('Functional Tests', function() {
     suite('PUT /api/issues/{project} => text', function() {
       test('No body', function(done) {
         chai.request(server)
-        .put('/api/issues/test/')
-        .send({
-          _id: id,
-          issue_title: undefined,
-          issue_text: undefined,
-          created_by: undefined
+          .put('/api/issues/apitest/')
+          .send({
+            _id: '5ca3330cf858c70725597a14'
+          })
+          .end(function(err, res) {
+            if (err) console.error(err);
+            assert.equal(res.status, 200);
+            assert.equal(res.text, 'no updated field sent');
+            done();
+          })
         })
-        .end(function(err, res) {
-          console.log("NO BODY TEST")
-          
-          assert.equal(res.status, 200);
-          assert.equal(res.text, 'no updated field sent');
-          done();
-        });
       });
+    
       
       test('One field to update', function(done) {
         chai.request(server)
-        .put('/api/issues/test/')
+        .put('/api/issues/apitest/')
         .send({
-          _id: id, issue_text: 'updated text'
+          _id: '5ca3330cf858c70725597a14', issue_text: 'updated text'
         })
         .end(function(err,res) {
-          console.log("check for ISSUE TEXT")
+          if (err) console.error(err);
+          // console.log('res.body')
           // console.log(res.body)
           if (err) console.error("One field to update"+err);
           assert.equal(res.status, 200);
@@ -137,27 +137,27 @@ suite('Functional Tests', function() {
 //         });
 //       });
       
-//       test('One filter', function(done) {
+// //       test('One filter', function(done) {
         
-//       });
+// //       });
       
-//       test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
+// //       test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
         
-//       });
+// //       });
       
-    });
+//     });
     
-//     suite('DELETE /api/issues/{project} => text', function() {
+// //     suite('DELETE /api/issues/{project} => text', function() {
       
-//       test('No _id', function(done) {
+// //       test('No _id', function(done) {
         
-//       });
+// //       });
       
-//       test('Valid _id', function(done) {
+// //       test('Valid _id', function(done) {
         
-//       });
+// //       });
       
-    // });
+     // });
 
   
 });

@@ -1,6 +1,6 @@
 
 function Check() {
-  function getBoolean(value){
+  function getBoolean(value) {
    switch(value){
         case false:
         case "false":
@@ -17,7 +17,7 @@ function Check() {
     var task;
     var fields = [];
     var justClosing = false;
-    console.log("this.requiredFields = function (...params) {")
+
     Check.somethingMissing = false;
     for (var param of params) {
       if (typeof param === 'object') {
@@ -62,7 +62,7 @@ function Check() {
       });
       if (emptyFields === fields.length) {
         Check.somethingMissing = true;
-        console.log("POST Check.somethingMissing = true;")
+        console.log("if (emptyFields === fields.length) {")
         res.send(faultMessage);
       }
       // return "successfully updated";
