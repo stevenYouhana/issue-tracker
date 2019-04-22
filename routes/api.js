@@ -5,17 +5,17 @@ module.exports = function (app) {
   var MongoClient = require('mongodb');
   var ObjectId = require('mongodb').ObjectID;
   var Check = require('../controllers/check');
-  var Update = require('../controllers/update'); 
+  var Update = require('../controllers/update');
   Object.size = function(obj) {
     var len = 0, key;
     for (key in obj) {
-      ++len;    
+      ++len;
     }
     return len;
   }
   var check = new Check();
   const CONNECTION_STRING = process.env.DB;
-  
+
   app.route('/api/issues/:project')
     .get(function (req, res){
       var project = req.params.project;
@@ -31,7 +31,7 @@ module.exports = function (app) {
       })
     })
     .post(function (req, res) {
-      var project = req.params.project; 
+      var project = req.params.project;
       MongoClient.connect(CONNECTION_STRING, function(err, db) {
         if (err) console.error(err)
         var issue = {
@@ -44,13 +44,13 @@ module.exports = function (app) {
           updated_on: new Date(Date.now()),
           created_on: new Date(Date.now())
         }
-        check.requiredFields(res, 
+        check.requiredFields(res,
                        {faultMessage: 'Missing required fields', task: 'new'},
                        issue.issue_title,
                        issue.issue_text,
                        issue.created_by
                       );
-        console.log('Check.somethingMissing '+Check.somethingMissing);
+        // console.log('Check.somethingMissing '+Check.somethingMissing);
         if (Check.somethingMissing) return;
         db.collection(project).insert(issue, function(err, r) {
           if (err) {
@@ -64,7 +64,6 @@ module.exports = function (app) {
       });
     })
     .put(function (req, res) {
-    console.log(req.body)
       var project = req.params.project;
       function sortStatus(status_text) {
         if (status_text === undefined) return undefined;
@@ -74,7 +73,7 @@ module.exports = function (app) {
           default: return undefined;
         }
       }
-      
+
       try {
         var issue = {
           issue_title: req.body.issue_title,
@@ -86,12 +85,13 @@ module.exports = function (app) {
           updated_on: new Date(Date.now()),
           created_on: new Date(Date.now())
         }
-        check.requiredFields(res, 
+        check.requiredFields(res,
                        {faultMessage: 'no updated field sent', task: 'update'},
                        issue.issue_title,
                        issue.issue_text,
                        issue.created_by
                       );
+        if (Check.somethingMissing) return;
         var update = new Update(req.body, project);
         update.findIssue(update.getProject, update.getBody)
         .then((originalIssue) => {
@@ -101,27 +101,28 @@ module.exports = function (app) {
               if (err) {
                 console.error(err)
               }
-              db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)}, 
-                                  {$set: {open: false, status_text: 'Closed'}}, 
+              db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)},
+                                  {$set: {open: false, status_text: 'Closed'}},
                                   {new: true}, function(err, data) {
                 if (err) console.error("function(err, issue) {"+err);
                 else console.info("update successful CLOSED ISSUE");
               });
           }
           else {
-            db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)}, 
-                                  {$set: update.getUpdatedIssue(issue, originalIssue)}, 
+            db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)},
+                                  {$set: update.getUpdatedIssue(issue, originalIssue)},
                                   {new: true}, function(err, data) {
                 if (err) console.error("function(err, issue) {"+err);
                 if (data) {
                    console.info("update successful FULL UPDATE");
-                   // res.json(data);
+                   // cosnole.log(data);
+                   res.json(data);
                 }
               });
           }
         }
         finally {
-          db.close();  
+          db.close();
         }
     });
         })
@@ -129,10 +130,8 @@ module.exports = function (app) {
           console.error(e);
           return;
         });
-      } 
+      }
       catch(e) {console.error(e) }
-     if (Check.somethingMissing) return;
-      
   })
     .delete(function (req, res){
       var project = req.params.project;
@@ -150,7 +149,7 @@ module.exports = function (app) {
               res.send({success: 'deleted '+req.body._id});
             }
             else {
-              res.send({failed: 'id '+req.body._id+' does not exist'});  
+              res.send({failed: 'id '+req.body._id+' does not exist'});
             }
           });
         }

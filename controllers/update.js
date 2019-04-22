@@ -6,7 +6,7 @@ class Update {
   constructor(body, project) {
     this.body = body;
     this.project = project;
-    this.returnIssue = "this.returnIssue = this.returnIssue; ";  
+    this.returnIssue = "this.returnIssue = this.returnIssue; ";
     this.givenIssueParams = {
                        issue_title: body.issue_title,
                        issue_text: body.issue_text,
@@ -16,10 +16,10 @@ class Update {
     }
   }
   get getBody() {
-    return this.body;  
+    return this.body;
   }
   get getProject() {
-    return this.project;  
+    return this.project;
   }
   findIssue(project, body) {
     return new Promise(function(resolve, reject) {
@@ -32,7 +32,6 @@ class Update {
                 // res.send('issue id not found');
               }
               if (issue) {
-                console.log("if (issue) {")
                 resolve(issue);
               }
               else {
@@ -47,36 +46,38 @@ class Update {
       });
     });
   }
-  
+
   sortStatis(text, original) {
-    if (!this.body.open) 
+    if (!this.body.open)
       return this.body.status_text ? this.body.status_text : original.status_text;
     else {
       return this.body.status_text.toLowerCase() == 'closed'  ? 'Closed' : 'Open';
     }
   }
-  
+
   getUpdatedIssue(issue, original) {
     function checkStatus(option, orig) {
       if (option === undefined) return orig;
       else if (option.toString().toLowerCase() === 'open')
         return true;
       else return false;
-
+    }
       issue = {
-        issue_title: this.body.issue_title ? this.body.issue_title : original.issue_title,
-        issue_text: this.body.issue_text ? this.body.issue_text : original.issue_text,
-        created_by: this.body.created_by ? this.body.created_by : original.created_by,
-        assigned_to: this.body.assigned_to ? this.body.assigned_to : original.assigned_to,
+        issue_title: this.body.issue_title ?
+         this.body.issue_title : original.issue_title,
+        issue_text: this.body.issue_text ?
+         this.body.issue_text : original.issue_text,
+        created_by: this.body.created_by ?
+         this.body.created_by : original.created_by,
+        assigned_to: this.body.assigned_to ?
+         this.body.assigned_to : original.assigned_to,
         status_text: this.sortStatis(this.body.status_text, original),
         open: checkStatus(this.body.status_text, original.open),
         updated_on: new Date(Date.now()),
         created_on: original.created_on
       };
       if (!issue.open) issue.status_text = 'Closed';
-      }
-    // console.log("updateIssue(issue, original) {")
-    // console.log(issue)
+
     return issue;
   }
   issueWork() {
@@ -85,7 +86,7 @@ class Update {
       this.returnIssue = fulfilled;
       //Test here!
     }).catch((e) => {
-      console.error("getIssue error: "+e)  
+      console.error("getIssue error: "+e)
     });
   }
 }

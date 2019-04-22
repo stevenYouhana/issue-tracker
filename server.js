@@ -5,7 +5,9 @@ var bodyParser  = require('body-parser');
 var expect      = require('chai').expect;
 var cors        = require('cors');
 const helmet = require('helmet');
+var dotenv = require('dotenv').config();
 
+// dotenv.config();
 var fccTestingRoutes  = require('./routes/fcctesting.js');
 var runner            = require('./test-runner');
 
@@ -34,9 +36,9 @@ app.route('/')
   })
 fccTestingRoutes(app);
 
-//Routing for API 
-apiRoutes(app);  
-    
+//Routing for API
+apiRoutes(app);
+
 //404 Not Found Middleware
 app.use(function(req, res, next) {
   res.status(404)
