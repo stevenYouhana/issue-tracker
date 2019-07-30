@@ -29,25 +29,26 @@ button {
   padding: 14px 16px;
   left: 50%;
 }
-/* .issue {
-  margin: 2px;
-  padding: 5px;
-  width: 60%;
-  border: 2px solid black;
-  text-align: center;
-  display: inline-block;
-} */
+
 .issue-criteria {
   width: 50%;
 }
-.text-area {
+
+#newIssue {
+  margin-bottom: 1px;
+}
+.issue-class {
+  margin: 50px auto;
+  background-color: red;
+}
+input, textarea, h1 {
   width: 50%;
-  height: 50px;
+  margin-bottom: 5px;
   resize: none;
 }
-#submitNewIssue {
-  margin: 0px auto;
-
+input[type="checkbox"] {
+  width: 10%;
+  background-color: red;
 }
 #projectTitle {
   text-align: center;
