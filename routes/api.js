@@ -94,7 +94,7 @@ module.exports = function (app) {
         if (Check.somethingMissing) return;
         var update = new Update(req.body, project);
         update.findIssue(update.getProject, update.getBody)
-        .then((originalIssue) => {
+        .then(originalIssue => {
           MongoClient.connect(CONNECTION_STRING, function(err, db) {
         try {
           if (req.body.hasOwnProperty('type')) {
@@ -105,7 +105,14 @@ module.exports = function (app) {
                                   {$set: {open: false, status_text: 'Closed'}},
                                   {new: true}, function(err, data) {
                 if (err) console.error("function(err, issue) {"+err);
-                else console.info("update successful CLOSED ISSUE");
+                else {
+                  if (data) {
+                     console.info("issue Closed", data);
+
+                     res.json(data.value);
+                  } else ("not data to send;")
+                }
+
               });
           }
           else {
@@ -115,7 +122,7 @@ module.exports = function (app) {
                 if (err) console.error("function(err, issue) {"+err);
                 if (data) {
                    console.info("update successful FULL UPDATE");
-                   // cosnole.log(data);
+                   cosnole.log(data);
                    res.json(data);
                 }
               });
@@ -133,7 +140,8 @@ module.exports = function (app) {
       }
       catch(e) {console.error(e) }
   })
-    .delete(function (req, res){
+    .delete(function (req, res) {
+      console.log(".delete(function (req, res) {")
       var project = req.params.project;
       MongoClient.connect(CONNECTION_STRING, function(err, db) {
         if (err) {
@@ -146,7 +154,7 @@ module.exports = function (app) {
             if (data) {
               db.collection(project).remove({_id: ObjectId(req.body._id)})
               db.close();
-              res.send({success: 'deleted '+req.body._id});
+              res.json(data);
             }
             else {
               res.send({failed: 'id '+req.body._id+' does not exist'});
