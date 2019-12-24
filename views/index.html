@@ -11,44 +11,44 @@
   </head>
   <body>
     <header>
-      <h1>
+      <h1 id="title">
         Issue Tracker
       </h1>
     </header>
-    <div id='userstories' style='margin-left: 5%; margin-top: 5%'>
+    <div id='project-issues'>
       <h2><a href='/apitest/'>project issues</a></h2>
     </div>
     <hr style='margin: 50px'>
-    <div id='testui' style='margin-left: 5%'>
+    <div id='testui'>
 
       <h3>Submit issue</i></h3>
       <form id="testForm" class="border">
-        <input type="text" name="issue_title" placeholder="*Title" style="width: 100px"><br>
-        <textarea type="text" name="issue_text" placeholder="*Text" style="width: 100px" required=''></textarea><br>
-        <input type="text" name="created_by" placeholder="*Created by" style="width: 100px" required=''><br>
-        <input type="text" name="assigned_to" placeholder="(opt)Assigned to" style="width: 100px"><br>
-        <input type="text" name="status_text" placeholder="(opt)Status text" style="width: 100px"><br>
+        <input type="text" name="issue_title" placeholder="*Title"><br>
+        <textarea type="text" name="issue_text" placeholder="*Text" required=''></textarea><br>
+        <input type="text" name="created_by" placeholder="*Created by" required=''><br>
+        <input type="text" name="assigned_to" placeholder="(opt)Assigned to"><br>
+        <input type="text" name="status_text" placeholder="(opt)Status text" ><br>
         <button type="submit" id="buttons">Submit Issue</button>
       </form><br>
       <h3>Update issue</h3>
       <form id="testForm2" class="border">
-        <input type="text" name="_id" placeholder="*_id" style="width: 100px" required=''><br>
-        <input type="text" name="issue_title" placeholder="(opt)Title" style="width: 100px"><br>
-        <textarea type="text" name="issue_text" placeholder="(opt)Text" style="width: 100px"></textarea><br>
-        <input type="text" name="created_by" placeholder="(opt)Created by" style="width: 100px"><br>
-        <input type="text" name="assigned_to" placeholder="(opt)Assigned to" style="width: 100px"><br>
-        <input type="text" name="status_text" placeholder="(opt)Status text" style="width: 100px"><br>
-        <label><input type="checkbox" name="open" value=false> Check to close issue</label><br>
+        <input type="text" name="_id" placeholder="*_id" required=''><br>
+        <input type="text" name="issue_title" placeholder="(opt)Title"><br>
+        <textarea type="text" name="issue_text" placeholder="(opt)Text"></textarea><br>
+        <input type="text" name="created_by" placeholder="(opt)Created by"><br>
+        <input type="text" name="assigned_to" placeholder="(opt)Assigned to"><br>
+        <input type="text" name="status_text" placeholder="(opt)Status text"><br>
+        <label><input type="checkbox" name="open" value=false>close issue</label><br>
         <button type="submit" class="btn">Submit Issue</button>
       </form><br>
       <h3>Delete issue</h3>
       <form id="testForm3" class="border">
-        <input type="text" name="_id" placeholder="_id" style="width: 100px" required=''><br>
+        <input type="text" name="_id" placeholder="_id" required=''><br>
         <button type="submit" class="btn">Delete Issue</button>
       </form>
       <code id='jsonResult'></code>
     </div>
-    <hr style='margin: 50px; margin-top: 200px'>
+    <hr>
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="

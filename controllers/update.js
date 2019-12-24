@@ -56,8 +56,11 @@ class Update {
   }
 
   getUpdatedIssue(issue, original) {
+    // console.log('original: ',original)
+    // console.log('new: ',issue)
     function checkStatus(option, orig) {
-      if (option === undefined) return orig;
+      console.log('option: '+option+' orig: '+orig);
+      if (!option) return orig;
       else if (option.toString().toLowerCase() === 'open')
         return true;
       else return false;
@@ -76,6 +79,7 @@ class Update {
         updated_on: new Date(Date.now()),
         created_on: original.created_on
       };
+      console.log('updated issue: ',issue);
       if (!issue.open) issue.status_text = 'Closed';
 
     return issue;

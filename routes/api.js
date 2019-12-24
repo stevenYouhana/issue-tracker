@@ -91,38 +91,36 @@ module.exports = function (app) {
                        issue.issue_text,
                        issue.created_by
                       );
-        if (Check.somethingMissing) return;
+        if (Check.somethingMissing) res.json({error: 'missong fields'});
         var update = new Update(req.body, project);
         update.findIssue(update.getProject, update.getBody)
         .then(originalIssue => {
+          console.log(".then(originalIssue => {");
           MongoClient.connect(CONNECTION_STRING, function(err, db) {
         try {
-          if (req.body.hasOwnProperty('type')) {
-              if (err) {
-                console.error(err)
+          console.log('req.body: ',req.body);
+          if (req.body.hasOwnProperty('open')) {
+            // console.log("if (req.body.status_text) { ", req.body.status_text)
+            db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)},
+                                {$set: {open: false, status_text: 'Closed'}},
+                                {new: true}, function(err, data) {
+              if (err) console.error("function(err, issue) {"+err);
+              else {
+                if (data) {
+                   console.info("issue closed", data);
+                   res.json(data.value);
+                } else ("not data to send;")
               }
-              db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)},
-                                  {$set: {open: false, status_text: 'Closed'}},
-                                  {new: true}, function(err, data) {
-                if (err) console.error("function(err, issue) {"+err);
-                else {
-                  if (data) {
-                     console.info("issue Closed", data);
-
-                     res.json(data.value);
-                  } else ("not data to send;")
-                }
-
-              });
+            });
           }
           else {
+            console.log("ELSE closed")
             db.collection(project).findOneAndUpdate({_id: ObjectId(req.body._id)},
                                   {$set: update.getUpdatedIssue(issue, originalIssue)},
                                   {new: true}, function(err, data) {
                 if (err) console.error("function(err, issue) {"+err);
                 if (data) {
-                   console.info("update successful FULL UPDATE");
-                   cosnole.log(data);
+                   // console.info("update successful FULL UPDATE", data);
                    res.json(data);
                 }
               });

@@ -11,7 +11,7 @@
   </head>
   <body>
     <header>
-      
+
     </header>
     <center>
       <div id='submitNewIssue'>
@@ -87,7 +87,7 @@
             type: "PUT",
             url: url,
             data: {_id: $(this).attr('id'), open: false, type: 'closeIssue'},
-            success: function(data) { console.log(data); alert(data.issue_title); window.location.reload(true); }
+            success: function(data) { alert("closing "+data.issue_title); window.location.reload(true); }
           });
           e.preventDefault();
         });
@@ -97,7 +97,7 @@
             type: "DELETE",
             url: url,
             data: {_id: $(this).attr('id')},
-            success: function(data) {console.log(data); alert(data.issue_title); window.location.reload(false); }
+            success: function(data) {alert("deleting "+data.issue_title); window.location.reload(false); }
           });
           e.preventDefault();
         });
