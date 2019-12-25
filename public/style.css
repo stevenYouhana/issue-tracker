@@ -1,19 +1,60 @@
 * {
   margin: 0px;
   padding: 0px;
+  background-color: #dff2f2;
 }
 
 body {
   padding: 10px;
+  font-family: Helvetica, Arial, sans-serif;
 }
-
-.issue {
-  margin: 20px;
+button {
+  background-color: #e6cc39;
+  height: 30px;
+}
+#testui {
+  margin:0px auto;
+  margin: 2px;
   padding: 5px;
   width: 60%;
   border: 2px solid black;
+  text-align: center;
+  display: inline-block;
+}
+.user-test {
+  float: left;
+  display: block;
+  color: blue;
+  text-align: center;
+  padding: 14px 16px;
+  left: 50%;
 }
 
+.issue-criteria {
+  width: 50%;
+}
+
+#newIssue {
+  margin-bottom: 1px;
+}
+.issue-class {
+  margin: 50px auto;
+  background-color: red;
+}
+input, textarea, h1 {
+  width: 50%;
+  margin-bottom: 5px;
+  resize: none;
+}
+input[type="checkbox"] {
+  width: 10%;
+  background-color: red;
+}
+#projectTitle {
+  text-align: center;
+  color: #9c860b;
+
+}
 .closed {
   background-color: lightgrey;
 }
