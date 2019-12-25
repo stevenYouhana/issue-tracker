@@ -4,10 +4,10 @@ function Check() {
    switch(value){
         case false:
         case "false":
-        case undefined: 
+        case undefined:
         case "":
             return false;
-        default: 
+        default:
             return true;
     }
   }
@@ -28,7 +28,7 @@ function Check() {
           }
         }
         if (param.hasOwnProperty('faultMessage')) {
-          faultMessage = param.faultMessage;  
+          faultMessage = param.faultMessage;
           task = param.task;
         }
         else {
@@ -36,7 +36,7 @@ function Check() {
         }
       }
       else {
-        fields.push(param); 
+        fields.push(param);
       }
     }
     if (task === 'new') {
@@ -47,22 +47,20 @@ function Check() {
           missingRequiredField = true;
         }
       });
-      if (missingRequiredField) { 
+      if (missingRequiredField) {
         Check.somethingMissing = true;
-        res.send(faultMessage);    
+        res.send(faultMessage);
       }
       // return "Issue added succesfully";
     }
     else if (task === 'update') {
       if (justClosing) return;
       var emptyFields = 0;
-      // console.log(fields)
       fields.forEach(function (field) {
         if (!getBoolean(field)) ++emptyFields;
       });
       if (emptyFields === fields.length) {
         Check.somethingMissing = true;
-        console.log("if (emptyFields === fields.length) {")
         res.send(faultMessage);
       }
       // return "successfully updated";

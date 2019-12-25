@@ -11,7 +11,7 @@
   </head>
   <body>
     <header>
-      <h1 id='projectTitle'></h1>
+
     </header>
 
     <center>
@@ -60,7 +60,7 @@
                 '<br>',
                 '<p class="id"><b>Created by:</b> '+ele.created_by+'  <b>Assigned to:</b> '+ele.assigned_to,
                 '<p class="id"><b>Created on:</b> '+ele.created_on+'  <b>Last updated:</b> '+ele.updated_on,
-                '<br><a href="#" class="closeIssue" id="'+ele._id+'">close?</a> <a href="#" class="deleteIssue" id="'+ele._id+'">delete?</a>',
+                '<br><a href="#" class="closeIssue" id="'+ele._id+'">close</a> <a href="#" class="deleteIssue" id="'+ele._id+'">delete</a>',
                 '</div>'
 
               ];
@@ -82,12 +82,13 @@
         });
 
         $('#issueDisplay').on('click','.closeIssue', function(e) {
+          console.log("$('#issueDisplay').on('click','.closeIssue', function(e)")
           var url = "/api/issues/"+currentProject;
           $.ajax({
             type: "PUT",
             url: url,
             data: {_id: $(this).attr('id'), open: false, type: 'closeIssue'},
-            success: function(data) { alert(data); window.location.reload(true); }
+            success: function(data) { alert("closing "+data.issue_title); window.location.reload(true); }
           });
           e.preventDefault();
         });
@@ -97,7 +98,7 @@
             type: "DELETE",
             url: url,
             data: {_id: $(this).attr('id')},
-            success: function(data) { alert(data); window.location.reload(true); }
+            success: function(data) {alert("deleting "+data.issue_title); window.location.reload(false); }
           });
           e.preventDefault();
         });
