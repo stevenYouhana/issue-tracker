@@ -1,7 +1,6 @@
 * {
   margin: 0px;
   padding: 0px;
-  background-color: #dff2f2;
 }
 
 body {
@@ -23,20 +22,17 @@ body.demos .section-title img {
     display: block;
     margin: 10px auto;
 }
-
 body.demos .service-widget h3 {
     border-bottom: 1px solid #ededed;
     font-size: 18px;
     padding: 20px 0;
     background-color: #ffffff;
 }
-
 body.demos .service-widget {
     margin: 0 0 30px;
     padding: 30px;
     background-color: #fff
 }
-
 body.demos .container-fluid {
     max-width: 1080px
 } */
@@ -190,43 +186,11 @@ button {
   padding: 5px;
   width: 60%;
   border: 2px solid black;
-  text-align: center;
-  display: inline-block;
 }
-.user-test {
-  float: left;
-  display: block;
-  color: blue;
-  text-align: center;
-  padding: 14px 16px;
-  left: 50%;
+.issue p {
+  color: #30302f;
 }
 
-.issue-criteria {
-  width: 50%;
-}
-
-#newIssue {
-  margin-bottom: 1px;
-}
-.issue-class {
-  margin: 50px auto;
-  background-color: red;
-}
-input, textarea, h1 {
-  width: 50%;
-  margin-bottom: 5px;
-  resize: none;
-}
-input[type="checkbox"] {
-  width: 10%;
-  background-color: red;
-}
-#projectTitle {
-  text-align: center;
-  color: #9c860b;
-
-}
 .closed {
   background-color: lightgrey;
 }
