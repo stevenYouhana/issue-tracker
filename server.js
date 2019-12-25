@@ -5,7 +5,7 @@ var bodyParser  = require('body-parser');
 var expect      = require('chai').expect;
 var cors        = require('cors');
 const helmet = require('helmet');
-var dotenv = require('dotenv').config();
+var dotenv = require('dotenv');
 
 // dotenv.config();
 var fccTestingRoutes  = require('./routes/fcctesting.js');

@@ -7,11 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<<<<<<< HEAD
-    <link rel="stylesheet" type="text/css" href="../public/style.css">
-=======
     <link rel="stylesheet" href="/public/style.css">
->>>>>>> div
   </head>
   <body>
     <header>
@@ -19,59 +15,6 @@
         Issue Tracker
       </h1>
     </header>
-<<<<<<< HEAD
-    <div id='userstories' class="user-test">
-
-      <h3>Example get usage:</h3>
-      <code>/api/issues/{project}</code><br>
-      <code>/api/issues/{project}?open=true&amp;assigned_to=Joe</code><br>
-      <h3>Example return:</h3>
-      <code>[{"_id":"5871dda29faedc3491ff93bb","issue_title":"Fix error in posting data","issue_text":"When we post data it has an error.","created_on":"2017-01-08T06:35:14.240Z","updated_on":"2017-01-08T06:35:14.240Z","created_by":"Joe","assigned_to":"Joe","open":true,"status_text":"In QA"},...]</code>
-      <br><br>
-      <h2><a href='/apitest/'>EXAMPLE: Go to <i>/apitest/</i> project issues</a></h2>
-    </div>
-    <hr style='margin: 50px'>
-    <div id="user-ui">
-      <form id="user-form" method="post">
-        <input type="text" name="issue_title" placeholder="*Title" class="issue-criteria"><br>
-        <textarea type="text" name="issue_text" placeholder="*Text" class="text-area" required=''></textarea><br>
-        <input type="text" name="created_by" placeholder="*Created by" class="issue-criteria" required=''><br>
-        <input type="text" name="assigned_to" placeholder="(opt)Assigned to" class="issue-criteria"><br>
-        <input type="text" name="status_text" placeholder="(opt)Status text" class="issue-criteria"><br>
-        <button type="submit">Submit Issue</button>
-      </form>
-    </div>
-    <div id='testui'>
-      <h2 style="text-align: left">API Tests:</h2>
-      <h3>Submit issue on <i>apitest</i></h3>
-      <form id="testForm" class="issue">
-        <input type="text" name="issue_title" placeholder="*Title" class="issue-criteria"><br>
-        <textarea type="text" name="issue_text" placeholder="*Text" class="text-area" required=''></textarea><br>
-        <input type="text" name="created_by" placeholder="*Created by" class="issue-criteria" required=''><br>
-        <input type="text" name="assigned_to" placeholder="(opt)Assigned to" class="issue-criteria"><br>
-        <input type="text" name="status_text" placeholder="(opt)Status text" class="issue-criteria"><br>
-        <button type="submit">Submit Issue</button>
-      </form><br>
-      <h3>Update issue on <i>apitest</i> (Change any or all to update issue on the _id supplied)</h3>
-      <form id="testForm2" class="issue">
-        <input type="text" name="_id" placeholder="*_id" required='' class="issue-criteria"><br>
-        <input type="text" name="issue_title" placeholder="(opt)Title" class="issue-criteria"><br>
-        <textarea type="text" name="issue_text" placeholder="(opt)Text" class="text-area"></textarea><br>
-        <input type="text" name="created_by" placeholder="(opt)Created by" class="issue-criteria"><br>
-        <input type="text" name="assigned_to" placeholder="(opt)Assigned to" class="issue-criteria"><br>
-        <input type="text" name="status_text" placeholder="(opt)Status text" class="issue-criteria"><br>
-        <label><input type="checkbox" name="open" value=false> Check to close issue</label><br>
-        <button type="submit">Submit Issue</button>
-      </form><br>
-      <h3>Delete issue on <i>apitest</i></h3>
-      <form id="testForm3" class="issue">
-        <input type="text" name="_id" placeholder="_id" class="issue-criteria" required=''><br>
-        <button type="submit">Delete Issue</button>
-      </form>
-      <code id='jsonResult'></code>
-    </div>
-
-=======
     <div id='project-issues'>
       <h2><a href='/apitest/'>project issues</a></h2>
     </div>
@@ -106,26 +49,12 @@
       <code id='jsonResult'></code>
     </div>
     <hr>
->>>>>>> div
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
             crossorigin="anonymous"></script>
     <script>
       $(function() {
-        $("#user-ui").submit(function(e) {
-          var api = $('#testForm').serializeArray()[0].value
-            .split('').filter(c => c != ' ').join('');
-            $.ajax({
-              url: '/api/issues/'+api,
-              type: 'post',
-              data: $('#user-form'),
-              success: function(data) {
-                $('#jsonResult').text(JSON.stringify(data));
-              }
-            });
-        })
-
         $('#testForm').submit(function(e) {
           $.ajax({
             url: '/api/issues/apitest',
@@ -137,7 +66,6 @@
           });
           e.preventDefault();
         });
-
         $('#testForm2').submit(function(e) {
           $.ajax({
             url: '/api/issues/apitest',
@@ -149,7 +77,6 @@
           });
             e.preventDefault();
         });
-
         $('#testForm3').submit(function(e) {
           console.log("testForm3 DELETE")
           $.ajax({
